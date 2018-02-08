@@ -1,0 +1,30 @@
+{
+  "name": "uglifySite",
+  "bin": {
+    "pick": "uglifySite"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
+    "build": "node uglifyBuild"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "browser-sync": "^2.18.13"
+  },
+  "dependencies": {
+    "clean-css": "^4.1.9",
+    "chalk": "^2.3.0",
+    "fs-extra": "^5.0.0",
+    "mkdirp": "^0.5.1",
+    "node.extend": "^2.0.0",
+    "progress": "^2.0.0",
+    "uglify-es": "^3.3.9",
+    "uglify-js": "^3.3.9"
+  }
+}

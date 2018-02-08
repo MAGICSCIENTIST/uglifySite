@@ -1,0 +1,7 @@
+node_modules
+arcgis_js_api
+.vscode
+typings
+jsconfig.json
+example
+typings.json
