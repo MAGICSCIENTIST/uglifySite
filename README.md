@@ -5,7 +5,7 @@ a library to min or copy your site's everything. split large project to small pa
 
 # TODO-LIST
 
-- [x] make a Better Progressbar
-- [x] open loader function api for custom type file
-- [x] faster and faster
-- [x] example and document
+- [ ] make a Better Progressbar
+- [ ] open loader function api for custom type file
+- [ ] faster and faster
+- [ ] example and document
