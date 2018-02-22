@@ -24,29 +24,52 @@ const defaultOpt = {
 }
 
 //TODO: this is a test
-let config = require('./uglify.config');
+// let config = require('./uglify.config');
 
-start(['SYS','visualMonitor'], config)
+// start(['SYS', 'visualMonitor'], config)
 // start(['common', 'map', 'login', 'platformCenter', 'visualMonitor'], config)
+
+
+/**
+ * 设置配置信息
+ * 
+ * @param {string||object} options 配置信息, string=> require配置文件路径, object=>配置项目的object
+ * @returns promise
+ */
+function _setConfig(options) {
+    return new Promise((res, rej) => {
+        if (typeof options === 'string') {
+            let config = require(options)
+            this.options = extend(true, defaultOpt, config);    
+            res(this.options)        
+        } else if (typeof options === 'object') {
+            this.options = extend(true, defaultOpt, options);
+            res(this.options)
+        } else {
+            throw "unExpected options type"
+        }
+    })
+}
+
 
 /**
  * 开始执行
  * 
  * @param {any} modNames 需要压缩的模块名
- * @param {any} options  
+ * @param {any} options  config obj || default find uglify.config.js
  */
-function start(modNames, options) {
+function _start(modNames, opt) {
 
     console.log(chalk.green("---------start building--------"));
 
-    let opt = extend(true, defaultOpt, options);
+    // let opt = extend(true, defaultOpt, options);
 
     // create dir if not exists
     if (!fs.existsSync(opt.dir)) {
         mkdirp(opt.dir);
     }
     if (opt.clearExportDir) {
-        console.log(succes('start clear : '+ opt.dir))
+        console.log(succes('start clear : ' + opt.dir))
         fs.emptyDirSync(opt.dir)
         console.log(succes('clear success'))
     }
@@ -124,7 +147,7 @@ function _recursiveToGetModules(modules, names, opt) {
  * Async压缩并输出模块文件
  * 
  * @param {any} mods 模块s
- * @returns 
+ * @returns promise
  */
 function _minModsAsync(mods, opt) {
     if (!mods) {
@@ -179,7 +202,7 @@ function _minModsAsync(mods, opt) {
     }
 
     //所有模块处理完后
-    Promise.all(oper_mode_List).then(values => {
+    return Promise.all(oper_mode_List).then(values => {
         console.log(succes('执行完毕'))
     })
 }
@@ -295,18 +318,18 @@ function _solvePath(srcPathStr, srcRoot, targetRoot) {
             })
     } else if (/\*\*/.test(srcPathStr)) { //如果包含 ** 符号 将下发所有内容和内容的内容加入list
         //TODO: WHOLE DIST COPY?
-        result = _readDir(srcRoot, { recursive: true, sync: true })
+        result = _readDir(srcPathStr.replace('**',''), { recursive: true, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
 
-    } else if (/\*/.test(srcPathStr)) { //如果包含 * 符号 将下放内容(只是同级非文件夹)加入list
-        result = _readDir(srcRoot, { recursive: false, sync: true })
+    } else if (/\*/.test(srcPathStr)) { //如果包含 * 符号 将下放内容(只是同级k非文件夹)加入list
+        result = _readDir(srcPathStr.replace('*',''), { recursive: false, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
     } else {
-        result.push(new pathObj(srcRoot + srcPathStr,path.resolve(targetRoot , srcRoot , srcPathStr)));
+        result.push(new pathObj(srcRoot + srcPathStr, path.resolve(targetRoot, srcRoot, srcPathStr)));
     }
     return result;
 
@@ -352,12 +375,12 @@ function _exJsFile(src, target, opt) {
     if (path.extname(src) !== opt.scriptExName) {
         src += opt.scriptExName;
     }
-    if(!fs.pathExistsSync(src)){
-        return new Promise(function(resolve){
-            resolve({err:'no file'});
+    if (!fs.pathExistsSync(src)) {
+        return new Promise(function (resolve) {
+            resolve({ err: 'no file' });
         });
     }
-    console.log(succes('start min work on '+src))
+    console.log(succes('start min work on ' + src))
     if (path.extname(target) !== opt.scriptExName) {
         target += opt.scriptExName;
     }
@@ -393,12 +416,12 @@ function _exCssFile(src, target, opt) {
     if (path.extname(src) !== opt.styleExName) {
         src += opt.styleExName;
     }
-    if(!fs.pathExistsSync(src)){
-        return new Promise(function(resolve){
-            resolve({err:'no file'});
+    if (!fs.pathExistsSync(src)) {
+        return new Promise(function (resolve) {
+            resolve({ err: 'no file' });
         });
     }
-    console.log(succes('start css work on '+src))
+    console.log(succes('start css work on ' + src))
     if (path.extname(target) !== opt.styleExName) {
         target += opt.styleExName;
     }
@@ -432,7 +455,7 @@ function _exCssFile(src, target, opt) {
  * @param {any} target 结果目标 string
  */
 function _copyFile(src, target, opt) {
-    console.log(succes('start copy on '+src))
+    console.log(succes('start copy on ' + src))
     return _fuckDir(target)
         .then(() => {
             return fs.copy(src, target)
@@ -506,4 +529,15 @@ function partPathTreeNode(path, parent) {
     }
     _setMyLevel.call(result);
     return result
+}
+
+module.exports = {
+    options: {},
+    start: function (modNames, options) {
+        this.options = extend(true, defaultOpt, options);
+        return _start.call(this, modNames, this.options);
+    },
+    setConfig: function (options) {
+        return _setConfig.call(this, options);
+    }
 }
