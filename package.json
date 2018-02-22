@@ -1,18 +1,18 @@
 {
-  "name": "uglifySite",
+  "name": "uglifysite",
   "bin": {
     "pick": "./bin/commander.js"
   },
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "uglifyBuild.js",
   "scripts": {
     "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
     "build": "pick -m copyExample"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "private": true,
   "devDependencies": {
     "browser-sync": "^2.18.13"
