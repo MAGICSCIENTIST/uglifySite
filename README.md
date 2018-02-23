@@ -1,7 +1,15 @@
 # uglifySite
+
+[![NPM](https://img.shields.io/badge/uglifysite-0.1.2-green.svg)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/)
+ 
 a library to min or copy your site's everything. split large project to small part.
 这是一个能把你的站点文件中能压缩的压缩,不能压缩的复制出, 从而分出一个新的project的类库. 主要用作自动的把庞大的项目分割成可用的小项目.
 因为可以copy,所以理论上只要有分拣需求,不是网站也能用(→_→)
+
+#Installation
+ 
+
+* $  npm install uglifysite --save-dev
 
 
 # WHY I START
