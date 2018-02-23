@@ -12,9 +12,34 @@ module.exports = {
     },
     modules: [
         {
-            name:'copyExample',
+            name:'common',
+            styleEntry:{
+                example:{
+                    css:{
+                        test:'**'
+                    }
+                }
+            },
+            scriptEntry:{
+                example:{
+                    js:{
+                        test:['index.js']
+                    }
+                }
+            },
             copyEntry:{
-                test:'example/**'
+                example:{
+                    fonts:{
+                        test:'*'
+                    }
+                }
+            },
+            htmlEntry:{
+                example:{
+                    html:{
+                        test:'index.html'
+                    }
+                }
             }
         }
     ]

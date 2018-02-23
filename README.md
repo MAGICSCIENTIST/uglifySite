@@ -3,6 +3,7 @@ a library to min or copy your site's everything. split large project to small pa
 这是一个能把你的站点文件中能压缩的压缩,不能压缩的复制出, 从而分出一个新的project的类库. 主要用作自动的把庞大的项目分割成可用的小项目.
 因为可以copy,所以理论上只要有分拣需求,不是网站也能用(→_→)
 
+
 # WHY I START
 手中项目结构复杂,工作需要经常将代码按功能模块拆分成小型可用系统.初步尝试使用webpack,但是可能是我太菜,由于项目使用了arcgis api for javascript, 打包屡次失败, 恼羞成怒┴─┴︵╰（‵□′╰）.考虑到各种框架的兼容性,再踩坑下去可能要跪,干脆就做了这么一个可以单纯压缩分解庞大项目的工具.
 

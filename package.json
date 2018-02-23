@@ -8,7 +8,7 @@
   "main": "uglifyBuild.js",
   "scripts": {
     "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
-    "build": "pick -m copyExample"
+    "build": "pick -m common"
   },
   "keywords": [],
   "author": "",

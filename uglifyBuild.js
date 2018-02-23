@@ -318,13 +318,13 @@ function _solvePath(srcPathStr, srcRoot, targetRoot) {
             })
     } else if (/\*\*/.test(srcPathStr)) { //如果包含 ** 符号 将下发所有内容和内容的内容加入list
         //TODO: WHOLE DIST COPY?
-        result = _readDir(srcPathStr.replace('**',''), { recursive: true, sync: true })
+        result = _readDir(srcRoot+srcPathStr.replace('**',''), { recursive: true, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
 
     } else if (/\*/.test(srcPathStr)) { //如果包含 * 符号 将下放内容(只是同级k非文件夹)加入list
-        result = _readDir(srcPathStr.replace('*',''), { recursive: false, sync: true })
+        result = _readDir(srcRoot+srcPathStr.replace('*',''), { recursive: false, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
