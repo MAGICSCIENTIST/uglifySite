@@ -1,6 +1,11 @@
 # uglifySite
 
-[![NPM](https://img.shields.io/badge/uglifysite-0.1.2-green.svg)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/)
+[![NPM](https://img.shields.io/badge/uglifysite-0.1.2-green.svg)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/) [![pro]( http://progressed.io/bar/80?title=completed)]()
+
+
+
+
+ 
  
 a library to min or copy your site's everything. split large project to small part.
 这是一个能把你的站点文件中能压缩的压缩,不能压缩的复制出, 从而分出一个新的project的类库. 主要用作自动的把庞大的项目分割成可用的小项目.
@@ -25,14 +30,13 @@ in my case,站点整体体积大约减少45% *★,°*:.☆\(￣▽￣)/$:*.°★
 - [x] with modules's `linkMods` i can find module's module recursively . with this sometimes you don't have to write too many names to solve a lot of files when your module have defined it's reference.
 - [x] entry's config support `*` to get it's children(child's children **not** included), `**` to get it's children(child's children **is** included) and Regular expression.
 - [x] support commander . please tap `-h` to get more details
-- [x] download from npm 
 
 # TODO-LIST
 - [ ] check and support other type like `scss` `less` and so on
 - [ ] make a Better Progressbar
 - [ ] open loader function api for custom type file
 - [ ] example and document
-
+- [ ] publish npm buddle
 
 # TRY-LIST
 - [ ] do something for `.html` files
