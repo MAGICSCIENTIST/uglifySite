@@ -1,6 +1,6 @@
 # uglifySite
 
-[![NPM](https://img.shields.io/badge/uglifysite-0.1.2-green.svg)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/) [![pro]( http://progressed.io/bar/80?title=completed)]()
+[![NPM](https://api.travis-ci.org/MAGICSCIENTIST/uglifySite.svg?branch=master)](https://travis-ci.org/MAGICSCIENTIST/uglifySite) [![NPM](https://img.shields.io/badge/uglifysite-0.1.2-green.svg)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/) [![pro]( http://progressed.io/bar/80?title=completed)]()
 
 
 
