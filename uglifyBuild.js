@@ -78,7 +78,7 @@ function _start(modNames, opt) {
         mkdirp(opt.dir);
     }
     if (opt.clearExportDir) {
-        console.log(succes('start clear : ' + opt.dir))
+        console.log(succes('start clean : ' + opt.dir))
         fs.emptyDirSync(opt.dir)
         console.log(succes('clear success'))
     }
@@ -131,7 +131,7 @@ function getModules(modNames, opt) {
  * @param {object} opt 
  */
 function _recursiveToGetModules(modules, names, opt) {
-    let result = [];        
+    let result = [];
     if (names instanceof Array) {
         //内容在modules就不再去获取了 避免死循环
         names = names.filter(x => {
@@ -151,7 +151,7 @@ function _recursiveToGetModules(modules, names, opt) {
 
     result.forEach(mod => {
         if (mod.linkMods) {
-            Array.prototype.push.apply(result, _recursiveToGetModules(result, mod.linkMods, opt))
+            Array.prototype.push.apply(result, _recursiveToGetModules(result, (mod.linkMods instanceof Array)? mod.linkMods.map(x=>x.toLowerCase()):mod.linkMods.toLowerCase(), opt))
         }
     })
     return result;
