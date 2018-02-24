@@ -39,7 +39,8 @@ const defaultOpt = {
 function _setConfig(options) {
     return new Promise((res, rej) => {
         if (typeof options === 'string') {
-            let config = require(options)
+            let requirepath = path.isAbsolute(options) ? options : path.resolve(options).replace(/\\/g, '/');
+            let config = require(requirepath)
             this.options = extend(true, defaultOpt, config);
             res(this.options)
         } else if (typeof options === 'object') {
@@ -62,6 +63,14 @@ function _start(modNames, opt) {
 
     console.log(chalk.green("---------start building--------"));
 
+    //check config's module's name is distinct
+    let _namelist = opt.modules.map(x=>{return x.name});    
+    _namelist.forEach(x=>{
+        if(_namelist.filter(_x=>_x===x).length>1){
+            throw "defined module <"+x+"> is not unique"
+        }
+    })
+
     // let opt = extend(true, defaultOpt, options);
 
     // create dir if not exists
@@ -78,6 +87,11 @@ function _start(modNames, opt) {
         // format: 'beautify', // formats output in a really nice way,
         returnPromise: true
     })
+
+
+    //用于忽略大小写
+    modNames = modNames.map(x=>x.toLowerCase());
+    opt.modules = opt.modules.map(x=>{x.name = x.name.toLowerCase();return x})
 
     let modules = getModules(modNames, opt);
     let msg = _minModsAsync(modules, opt);
@@ -117,7 +131,7 @@ function getModules(modNames, opt) {
  * @param {object} opt 
  */
 function _recursiveToGetModules(modules, names, opt) {
-    let result = [];
+    let result = [];        
     if (names instanceof Array) {
         //内容在modules就不再去获取了 避免死循环
         names = names.filter(x => {
