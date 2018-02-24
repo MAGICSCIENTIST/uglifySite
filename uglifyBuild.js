@@ -12,7 +12,7 @@ let chalk = require('chalk')
 // 变量
 const succes = chalk.green;
 const error = chalk.red;
-const warn = chalk.g
+const warn = chalk.yellow
 const defaultOpt = {
     dir: './dist/', //根目录
     clearExportDir: false,
@@ -40,8 +40,8 @@ function _setConfig(options) {
     return new Promise((res, rej) => {
         if (typeof options === 'string') {
             let config = require(options)
-            this.options = extend(true, defaultOpt, config);    
-            res(this.options)        
+            this.options = extend(true, defaultOpt, config);
+            res(this.options)
         } else if (typeof options === 'object') {
             this.options = extend(true, defaultOpt, options);
             res(this.options)
@@ -211,7 +211,18 @@ function _minModsAsync(mods, opt) {
 function entryExWorker(root, entry, _pobjList, opt) {
     return new Promise((res, rej) => {
         try {
-            res(_recursiveEntry(root, entry, _pobjList, opt))
+            let result = [];
+            let pathlist = _recursiveEntry(root, entry, _pobjList, opt)
+            //distinct
+            pathlist.filter(_pathobj => {
+                let i = result.findIndex(x => x.src === _pathobj.src && x.target === _pathobj.target);
+                //if i'm not in the result  
+                //    then push me in result
+                if (i === -1) {
+                    result.push(_pathobj);
+                }
+            })
+            res(result)
         } catch (err) {
             rej(err)
         }
@@ -318,13 +329,13 @@ function _solvePath(srcPathStr, srcRoot, targetRoot) {
             })
     } else if (/\*\*/.test(srcPathStr)) { //如果包含 ** 符号 将下发所有内容和内容的内容加入list
         //TODO: WHOLE DIST COPY?
-        result = _readDir(srcRoot+srcPathStr.replace('**',''), { recursive: true, sync: true })
+        result = _readDir(srcRoot + srcPathStr.replace('**', ''), { recursive: true, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
 
     } else if (/\*/.test(srcPathStr)) { //如果包含 * 符号 将下放内容(只是同级k非文件夹)加入list
-        result = _readDir(srcRoot+srcPathStr.replace('*',''), { recursive: false, sync: true })
+        result = _readDir(srcRoot + srcPathStr.replace('*', ''), { recursive: false, sync: true })
             .map(_path => {
                 return new pathObj(_path, path.resolve(targetRoot, _path));
             })
@@ -401,6 +412,7 @@ function _exJsFile(src, target, opt) {
             console.log(error('-----------msg-------------'))
             console.log(error(err))
             console.log(error('-----------msg-------------'))
+            console.log(warn('try to start copy :' + target))
             _copyFile(src, target, opt);
         })
 }
@@ -443,7 +455,7 @@ function _exCssFile(src, target, opt) {
             console.log(error('-----------msg-------------'))
             console.log(error(err))
             console.log(error('-----------msg-------------'))
-            console.log(warn('start copy :' + target))
+            console.log(warn('try to start copy :' + target))
             _copyFile(src, target, opt);
         })
 }
