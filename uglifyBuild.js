@@ -61,13 +61,15 @@ function _setConfig(options) {
  */
 function _start(modNames, opt) {
 
+    console.time("clean")
+    console.time("work")
     console.log(chalk.green("---------start building--------"));
 
     //check config's module's name is distinct
-    let _namelist = opt.modules.map(x=>{return x.name});    
-    _namelist.forEach(x=>{
-        if(_namelist.filter(_x=>_x===x).length>1){
-            throw "defined module <"+x+"> is not unique"
+    let _namelist = opt.modules.map(x => { return x.name });
+    _namelist.forEach(x => {
+        if (_namelist.filter(_x => _x === x).length > 1) {
+            throw "defined module <" + x + "> is not unique"
         }
     })
 
@@ -80,6 +82,7 @@ function _start(modNames, opt) {
     if (opt.clearExportDir) {
         console.log(succes('start clean : ' + opt.dir))
         fs.emptyDirSync(opt.dir)
+        console.timeEnd("clean")
         console.log(succes('clear success'))
     }
 
@@ -90,8 +93,8 @@ function _start(modNames, opt) {
 
 
     //用于忽略大小写
-    modNames = modNames.map(x=>x.toLowerCase());
-    opt.modules = opt.modules.map(x=>{x.name = x.name.toLowerCase();return x})
+    modNames =(modNames instanceof Array)? modNames.map(x => x.toLowerCase()):modNames.toLowerCase();
+    opt.modules = opt.modules.map(x => { x.name = x.name.toLowerCase(); return x })
 
     let modules = getModules(modNames, opt);
     let msg = _minModsAsync(modules, opt);
@@ -151,7 +154,7 @@ function _recursiveToGetModules(modules, names, opt) {
 
     result.forEach(mod => {
         if (mod.linkMods) {
-            Array.prototype.push.apply(result, _recursiveToGetModules(result, (mod.linkMods instanceof Array)? mod.linkMods.map(x=>x.toLowerCase()):mod.linkMods.toLowerCase(), opt))
+            Array.prototype.push.apply(result, _recursiveToGetModules(result, (mod.linkMods instanceof Array) ? mod.linkMods.map(x => x.toLowerCase()) : mod.linkMods.toLowerCase(), opt))
         }
     })
     return result;
@@ -217,7 +220,10 @@ function _minModsAsync(mods, opt) {
 
     //所有模块处理完后
     return Promise.all(oper_mode_List).then(values => {
-        console.log(succes('执行完毕'))
+        let count = 0;
+        values.forEach(x => count += x.length)
+        console.timeEnd("work")
+        console.log(succes('执行完毕 共处理 ' + count + '个文件||文件夹'))
     })
 }
 
