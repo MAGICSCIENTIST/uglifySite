@@ -1,13 +1,11 @@
-# uglifySite
-
-[![NPM](https://api.travis-ci.org/MAGICSCIENTIST/uglifySite.svg?branch=master)](https://travis-ci.org/MAGICSCIENTIST/uglifySite) [![NPM ver](https://img.shields.io/npm/v/uglifysite.svg?style=flat)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/) [![pro]( http://progressed.io/bar/80?title=completed)]()
+# uglifySite [![NPM](https://api.travis-ci.org/MAGICSCIENTIST/uglifySite.svg?branch=master)](https://travis-ci.org/MAGICSCIENTIST/uglifySite) [![NPM ver](https://img.shields.io/npm/v/uglifysite.svg?style=flat)](https://www.npmjs.com/package/uglifysite) [![ISSUES](https://img.shields.io/github/issues/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/issues) [![LICENSE](https://img.shields.io/github/license/MAGICSCIENTIST/uglifySite.svg)](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/LICENSE) [![NODE](https://img.shields.io/badge/node-%3E6.11.2-brightgreen.svg)](https://nodejs.org/en/) [![pro]( http://progressed.io/bar/80?title=completed)]()
 
 
 
 
  
  
-a library to min or copy your site's everything. split large project to small part.
+a library to min or copy your site's everything. split large project to small part. support dojo define.
 这是一个能把你的站点文件中能压缩的压缩,不能压缩的复制出, 从而分出一个新的project的类库. 主要用作自动的把庞大的项目分割成可用的小项目.
 因为可以copy,所以理论上只要有分拣需求,不是网站也能用(→_→)
 
