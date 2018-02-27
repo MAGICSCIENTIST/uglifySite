@@ -10,8 +10,13 @@
     "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
     "build": "pick -m common"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["dojo","uglify","copy"],
+  "author": "MagicScientistGGG",
+  "homepage": "https://github.com/MAGICSCIENTIST/uglifySite",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAGICSCIENTIST/uglifySite.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.18.13"
