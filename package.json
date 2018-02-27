@@ -10,7 +10,11 @@
     "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
     "build": "pick -m common"
   },
-  "keywords": ["dojo","uglify","copy"],
+  "keywords": [
+    "dojo",
+    "uglify",
+    "copy"
+  ],
   "author": "MagicScientistGGG",
   "homepage": "https://github.com/MAGICSCIENTIST/uglifySite",
   "repository": {
@@ -29,7 +33,6 @@
     "mkdirp": "^0.5.1",
     "node.extend": "^2.0.0",
     "progress": "^2.0.0",
-    "uglify-es": "^3.3.9",
-    "uglify-js": "^3.3.9"
+    "uglify-es": "^3.3.9"
   }
 }
