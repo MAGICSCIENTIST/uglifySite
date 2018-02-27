@@ -3,7 +3,7 @@
   "bin": {
     "pick": "./bin/commander.js"
   },
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "a library to min or copy your site's everything. split large project to small part. support dojo define.",
   "main": "uglifyBuild.js",
   "scripts": {
