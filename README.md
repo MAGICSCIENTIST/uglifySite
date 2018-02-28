@@ -14,7 +14,6 @@ a library to min or copy your site's everything. split large project to small pa
 
 * $  npm install uglifysite --save-dev
 
-
 # WHY I START
 手中项目结构复杂,工作需要经常将代码按功能模块拆分成小型可用系统.初步尝试使用webpack,但是可能是我太菜,由于项目使用了arcgis api for javascript, 打包屡次失败, 恼羞成怒┴─┴︵╰（‵□′╰）.考虑到各种框架的兼容性,再踩坑下去可能要跪,干脆就做了这么一个可以单纯压缩分解庞大项目的工具.
 
@@ -34,10 +33,114 @@ in my case,站点整体体积大约减少45% *★,°*:.☆\(￣▽￣)/$:*.°★
 - [ ] check and support other type like `scss` `less` and so on
 - [ ] make a Better Progressbar
 - [ ] open loader function api for custom type file
-- [ ] example and document
+- [x] simple document
+- [ ] example
 
 # TRY-LIST
 - [ ] do something for `.html` files
 - [ ] combine two `.js` or `.css` files if allowed
 - [ ] try to kill images that no use
 - [ ] faster and faster
+
+# HOW TO USE
+## from commander
+
+```
+$ uglifysite -c ./xxx/uglify.config.js -m mod1,mod2... 
+```
+
+## from api
+
+```  javascript
+let uglifySite = require('uglifySite');
+uglifySite
+  .setConfig('./uglify.config.js') //.setConfig(configObj) 
+  .then(res=>{
+    return uglifySite.start('modName or modNames array')
+    //uglifySite.start('XXX');
+    //uglifySite.start(['XXX1','XXX2']);
+  })
+  .then(()=>{
+    //done
+  })
+```
+
+## config file
+* a basic config file 
+``` javascript
+module.exports = {
+    dir: './dist/', //输出根目录 export to where
+    clearExportDir: true, //干活前是否清空输出目录, if clear target dir before work
+    modules: [ 
+        //模块1 module1
+        //模块2 module2
+        //模块3 module3
+        ...
+    ]
+
+}
+
+```
+
+* every defined module is a obj that has some parameters
+``` javascript
+{
+            name:'common', //module's unique name 
+            linkMods: ['XXXX1','XXXX2'], // reference modules's name.
+            styleEntry{ //style files's location 
+               test:"XXXX/XXXX.CSS"
+            },
+            scriptEntry:{ //script files's location
+                test:"XXXX/XXXX.js"
+            },
+            htmlEntry:{//html files's  location
+                test:"XXXX/XXXX.html"
+            },
+            copyEntry:{ //other files's location
+                test:"XXXX/XXXX"
+            }
+}
+
+```
+
+* all entry support several location types => obj tree, string||string[], Regular expression...
+``` javascript
+//string
+scriptEntry:{
+    test:'example/js/index.js'
+}
+
+//string[]
+scriptEntry:{
+    test:['example/js/index.js','example/js/index2.js']
+}
+
+//obj tree
+scriptEntry:{
+    example:{
+        js:{    
+            test:['index.js','index2.js']
+        }
+    }
+}
+
+//Regular expression in '{}'
+scriptEntry:{
+    test:'script/menu/{.+\.js}', //mean: script/menu/all js file 
+}
+
+// all test also support * and ** . (mostly used by copyEntry)
+copyEntry:{
+    test:'fonts/*', //mean: all file in fonts (child's children excluded)
+}
+copyEntry:{
+    test:'fonts/**', //mean: all file in fonts (child's children included)
+}
+
+// obj tree support * and ** and regular expression too
+copyEntry:{
+    fonts:{
+        test:'**'
+    }
+}
+```

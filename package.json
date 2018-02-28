@@ -1,9 +1,9 @@
 {
   "name": "uglifysite",
   "bin": {
-    "pick": "./bin/commander.js"
+    "uglifysite": "./bin/commander.js"
   },
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "a library to min or copy your site's everything. split large project to small part. support dojo define.",
   "main": "uglifyBuild.js",
   "scripts": {

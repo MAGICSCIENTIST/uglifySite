@@ -97,7 +97,7 @@ function _start(modNames, opt) {
     opt.modules = opt.modules.map(x => { x.name = x.name.toLowerCase(); return x })
 
     let modules = getModules(modNames, opt);
-    let msg = _minModsAsync(modules, opt);
+    return _minModsAsync(modules, opt);
     // console.log(succes(msg));
 
 }
