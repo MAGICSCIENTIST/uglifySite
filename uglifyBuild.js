@@ -417,7 +417,7 @@ function _exJsFile(src, target, opt) {
     }
     return fs.readFile(src, 'utf8')
         .then((data) => {
-            let result = uglifyjs.minify(data);
+            let result = uglifyjs.minify(data,{output:{ascii_only:true}});
             if (result.error) {
                 throw result.error;
             }
