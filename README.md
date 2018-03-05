@@ -97,8 +97,8 @@ module.exports = {
                 test:"XXXX/XXXX.html"
             },
             copyEntry:{ //other files's location
-                test:"XXXX/XXXX"
-            }
+                test:"XXXX/XXXX" //no extName === folder
+            }
 }
 
 ```
