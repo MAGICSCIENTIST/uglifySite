@@ -4,7 +4,7 @@
 
 [TOC]
 
-## 0.2.3
+## 0.3.0
 [+] 新增配置项 justCopy, true=>所有entry执行操作变为copy. 满足想要打包一个开发包,但配置文件不动的需求. 默认为false.
 
 [+] 新增配置项 cssBeautifyMethod, clean-css的format配置项. 默认"beautify".
