@@ -9,6 +9,8 @@
 
 [+] 新增配置项 ascii_only 以解决某些中文会出现乱码的问题,默认为true
 
+[^] 修改配置项 clearExportDir 默认值为false
+
 
 
 
