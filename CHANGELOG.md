@@ -9,6 +9,8 @@
 
 [+] 新增配置项 cssBeautifyMethod, clean-css的format配置项. 默认"beautify".
 
+[^] 修复clearExportDir为false时有事会报错, 文件夹已存在的bug.
+
 ## 0.2.2
 [+] 新增配置项 beautify 以控制文件处理方式true=>只美化不压缩,false=>压缩,默认为false
 
