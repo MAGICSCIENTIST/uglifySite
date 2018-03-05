@@ -16,7 +16,8 @@ const warn = chalk.yellow
 const defaultOpt = {
     dir: './dist/', //根目录
     clearExportDir: false,
-
+    beautify: false,
+    ascii_only: true,
     //TODO: NO USE THIS TIME
     scriptExName: '.js',
     htmlExName: '.html',
@@ -93,7 +94,7 @@ function _start(modNames, opt) {
 
 
     //用于忽略大小写
-    modNames =(modNames instanceof Array)? modNames.map(x => x.toLowerCase()):modNames.toLowerCase();
+    modNames = (modNames instanceof Array) ? modNames.map(x => x.toLowerCase()) : modNames.toLowerCase();
     opt.modules = opt.modules.map(x => { x.name = x.name.toLowerCase(); return x })
 
     let modules = getModules(modNames, opt);
@@ -417,7 +418,12 @@ function _exJsFile(src, target, opt) {
     }
     return fs.readFile(src, 'utf8')
         .then((data) => {
-            let result = uglifyjs.minify(data,{output:{ascii_only:true}});
+            let result = uglifyjs.minify(data, {
+                output: {
+                    ascii_only: opt.ascii_only,
+                    beautify:opt.beautify
+                }
+            });
             if (result.error) {
                 throw result.error;
             }

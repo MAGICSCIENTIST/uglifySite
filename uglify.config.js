@@ -1,6 +1,9 @@
 module.exports = {
     dir: './dist/', //输出根目录
-    clearExportDir: true,
+    clearExportDir: false,
+    beautify :false,
+    justCopy:true,
+    ascii_only:true,
     clearExclude: {
         test: 'arcgis_js_api/**', //TODO: CHECK THIS
     },
