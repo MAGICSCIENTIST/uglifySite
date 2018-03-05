@@ -8,6 +8,7 @@
 a library to min or copy your site's everything. split large project to small part. support dojo define.
 这是一个能把你的站点文件中能压缩的压缩,不能压缩的复制出, 从而分出一个新的project的类库. 主要用作自动的把庞大的项目分割成可用的小项目.
 因为可以copy,所以理论上只要有分拣需求,不是网站也能用(→_→)
+### [更新日志](https://github.com/MAGICSCIENTIST/uglifySite/blob/master/CHANGELOG.md)
 
 # Installation
  

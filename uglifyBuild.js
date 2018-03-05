@@ -17,6 +17,8 @@ const defaultOpt = {
     dir: './dist/', //根目录
     clearExportDir: false,
     beautify: false,
+    cssBeautifyMethod: "beautify", //keep-breaks .... clean-css format
+    justCopy: false, //change all entry to copy method
     ascii_only: true,
     //TODO: NO USE THIS TIME
     scriptExName: '.js',
@@ -88,7 +90,7 @@ function _start(modNames, opt) {
     }
 
     cleanCssFunc = new _cleanCss({
-        // format: 'beautify', // formats output in a really nice way,
+        format: opt.beautify ? opt.cssBeautifyMethod : undefined, // formats output in a really nice way,
         returnPromise: true
     })
 
@@ -180,7 +182,7 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.scriptEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return _exJsFile(_pobj.src, _pobj.target, opt);
+                    return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exJsFile(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
@@ -188,7 +190,7 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.styleEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return _exCssFile(_pobj.src, _pobj.target, opt);
+                     return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exCssFile(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
@@ -421,7 +423,7 @@ function _exJsFile(src, target, opt) {
             let result = uglifyjs.minify(data, {
                 output: {
                     ascii_only: opt.ascii_only,
-                    beautify:opt.beautify
+                    beautify: opt.beautify
                 }
             });
             if (result.error) {
@@ -519,12 +521,20 @@ function _fuckDir(pathStr) {
         if (path.extname(pathStr)) {
             pathStr = path.dirname(pathStr);
         }
-        mkdirp(pathStr, (err) => {
-            if (err) {
-                reject(err);
-            }
-            resolve();
-        });
+        fs.pathExists(pathStr)
+            .then(exisits => {
+                if (exisits) {
+                    resolve()
+                } else {
+                    mkdirp(pathStr, (err) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve();
+                    });
+                }
+            })
+
     });
 }
 

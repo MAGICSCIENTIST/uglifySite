@@ -17,8 +17,8 @@ let _cpath = program.configPath || path.resolve("").replace(/\\/g,'/') + '/uglif
 uglifySite.setConfig(_cpath)
     .then(res => {
         console.log(uglifySite.options);
-        // uglifySite.start('common');
-        uglifySite.start(program.modNames.split(','));
+         uglifySite.start('common');
+        // uglifySite.start(program.modNames.split(','));
     }).catch(err => {
         throw err;
     });
