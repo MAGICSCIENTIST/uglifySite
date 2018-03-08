@@ -3,6 +3,8 @@
 ---
 
 [TOC]
+## 0.3.1
+[+] start方法接收"all"作为modNames参数,用于直接生成所有已定义的modules,会按name查重.
 
 ## 0.3.0
 [+] 新增配置项 justCopy, true=>所有entry执行操作变为copy. 满足想要打包一个开发包,但配置文件不动的需求. 默认为false.

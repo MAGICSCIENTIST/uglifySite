@@ -114,7 +114,9 @@ function _start(modNames, opt) {
  */
 function getModules(modNames, opt) {
     let result = [];
-    let modules = _recursiveToGetModules([], modNames, opt);
+
+    let modules = (modNames === 'all')?opt.modules:_recursiveToGetModules([], modNames, opt);
+
     //distinct
     modules.filter(mod => {
         let i = result.findIndex(x => x.name === mod.name);
@@ -190,7 +192,7 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.styleEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                     return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exCssFile(_pobj.src, _pobj.target, opt);
+                    return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exCssFile(_pobj.src, _pobj.target, opt);
                 })
             )
         }))

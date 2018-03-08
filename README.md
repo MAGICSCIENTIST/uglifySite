@@ -58,6 +58,7 @@ uglifySite
   .setConfig('./uglify.config.js') //.setConfig(configObj) 
   .then(res=>{
     return uglifySite.start('modName or modNames array')
+    //uglifySite.start('all');//do with all modules that defined in config
     //uglifySite.start('XXX');
     //uglifySite.start(['XXX1','XXX2']);
   })
