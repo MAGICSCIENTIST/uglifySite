@@ -16,9 +16,10 @@ console.log(program.modNames)
 let _cpath = program.configPath || path.resolve("").replace(/\\/g,'/') + '/uglify.config.js';
 uglifySite.setConfig(_cpath)
     .then(res => {
-        console.log(uglifySite.options);
-        //  uglifySite.start('all');
-        uglifySite.start(program.modNames.split(','));
+        // console.log(uglifySite.options);
+        // uglifySite.start('all');
+        
+        uglifySite.start((program.modNames === 'all')?'all':program.modNames.split(','));
     }).catch(err => {
         throw err;
     });
