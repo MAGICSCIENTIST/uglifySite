@@ -3,6 +3,9 @@
 ---
 
 [TOC]
+## 0.3.2
+[^] 修复-m all 不能正常获取所有module的问题
+
 ## 0.3.1
 [+] start方法接收"all"作为modNames参数,用于直接生成所有已定义的modules,会按name查重.
 
