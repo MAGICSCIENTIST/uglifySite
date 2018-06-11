@@ -8,12 +8,14 @@
   "main": "uglifyBuild.js",
   "scripts": {
     "browser": "browser-sync start --server --directory  --port 50032 --files \"**/*.css, **/*.html , **/*.js\"",
-    "build": "pick -m common"
+    "build": "pick -m common --clear --copy"
   },
   "keywords": [
     "dojo",
     "uglify",
-    "copy"
+    "copy",
+    "pack",
+    "split"
   ],
   "author": "MagicScientistGGG",
   "homepage": "https://github.com/MAGICSCIENTIST/uglifySite",

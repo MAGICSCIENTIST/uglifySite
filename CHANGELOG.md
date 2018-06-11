@@ -3,6 +3,10 @@
 ---
 
 [TOC]
+
+## 0.3.3
+[+] 新增命令 --clear 和 --copy 和 --beautity
+
 ## 0.3.2
 [^] 修复-m all 不能正常获取所有module的问题
 

@@ -1,7 +1,7 @@
 module.exports = {
     dir: './dist/', //输出根目录
     clearExportDir: false,
-    beautify :true,
+    beautify :false,
     justCopy:false,
     ascii_only:true,
     clearExclude: {
