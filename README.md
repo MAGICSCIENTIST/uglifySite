@@ -47,7 +47,11 @@ in my case,站点整体体积大约减少45% *★,°*:.☆\(￣▽￣)/$:*.°★
 ## from commander
 
 ```
-$ uglifysite -c ./xxx/uglify.config.js -m mod1,mod2... 
+//basic use if your config file live in some other folder
+$ uglifysite -c ./xxx/xxxx.js -m mod1,mod2... 
+
+// if you have a  uglify.config.js file in your root just use this
+$ uglifysite  -m mod1,mod2... 
 ```
 
 ```
@@ -56,7 +60,8 @@ $ -c  xxxx/xxx/xxxxx.js
 ```
 
 ```
-//-m is set which module should be pack, can be a list split by \,\ .data is the name that defined in your config file 
+//-m is set which module should be pack, can be a list split by \,\ .
+//  data is the name that defined in your config file 
 $ -m  XXX1,XXX2,XXX3
 
 // -m all means build all module defined in config file
