@@ -61,7 +61,7 @@ $ -c  xxxx/xxx/xxxxx.js
 
 ```
 //-m is set which module should be pack, can be a list split by \,\ .
-//  data is the name that defined in your config file 
+// accept data is the name of some modules that defined in your config file 
 $ -m  XXX1,XXX2,XXX3
 
 // -m all means build all module defined in config file
