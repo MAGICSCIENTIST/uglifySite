@@ -50,6 +50,28 @@ in my case,站点整体体积大约减少45% *★,°*:.☆\(￣▽￣)/$:*.°★
 $ uglifysite -c ./xxx/uglify.config.js -m mod1,mod2... 
 ```
 
+```
+//-c is set config file path , default is uglify.config.js in the root 
+$ -c  xxxx/xxx/xxxxx.js
+```
+
+```
+//-m is set which module should be pack, can be a list split by \,\ .data is the name that defined in your config file 
+$ -m  XXX1,XXX2,XXX3
+
+// -m all means build all module defined in config file
+$ -m  all
+```
+
+```
+// other params
+$ --copy  //mens do not build or uglify just copy
+
+$ --clear  //mens clear target folder before build
+```
+
+
+
 ## from api
 
 ```  javascript
