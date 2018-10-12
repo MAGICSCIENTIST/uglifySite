@@ -1,9 +1,9 @@
 module.exports = {
     dir: './dist/', //输出根目录
     clearExportDir: false,
-    beautify :false,
-    justCopy:false,
-    ascii_only:true,
+    beautify: false,
+    justCopy: false,
+    ascii_only: true,
     clearExclude: {
         test: 'arcgis_js_api/**', //TODO: CHECK THIS
     },
@@ -15,35 +15,48 @@ module.exports = {
     },
     modules: [
         {
-            name:'common',
-            styleEntry:{
-                example:{
-                    css:{
-                        test:'**'
-                    }
-                }
+             name:'common',
+            // styleEntry:{
+            //     example:{
+            //         css:{
+            //             test:'**'
+            //         }
+            //     }
+            // },
+            // scriptEntry:{
+            //   test:"testFiles/**"
+            // },
+            // copyEntry:{
+            //     example:{
+            //         fonts:{
+            //             test:'*'
+            //         }
+            //     }
+            // },
+            // htmlEntry:{
+            //     example:{
+            //         html:{
+            //             test:'index.html'
+            //         }
+            //     }
+            // }
+            entry: {
+                test: "src/**"
             },
-            scriptEntry:{
-                example:{
-                    js:{
-                        test:['index.js']
-                    }
-                }
-            },
-            copyEntry:{
-                example:{
-                    fonts:{
-                        test:'*'
-                    }
-                }
-            },
-            htmlEntry:{
-                example:{
-                    html:{
-                        test:'index.html'
-                    }
-                }
-            }
+        }
+    ],
+    loader: [
+        {
+            test: [".vue"],
+            loader: "vueLoader"
+        },
+        {
+            test: [".css"],
+            loader: "cssLoader"
+        },        
+        {
+            test: [".js"],
+            loader: "jsLoader"
         }
     ]
 

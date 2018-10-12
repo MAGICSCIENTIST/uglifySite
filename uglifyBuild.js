@@ -1,18 +1,25 @@
 //引用
-let ProgressBar = require('progress');
+// let ProgressBar = require('progress');
 let extend = require('node.extend');
 let fs = require('fs-extra');
 let path = require('path');
-let mkdirp = require('mkdirp');
-// let uglifyjs = require('uglify-js');
-let uglifyjs = require('uglify-es');
-let _cleanCss = require('clean-css');
-let cleanCssFunc;
-let chalk = require('chalk')
+// let mkdirp = require('mkdirp');
+let log = require('./common/log')
+let commonFunc = require('./common/commonFunc')
+//defloader:
+let vueLoader = require('./exLoader/executor-vue')
+let cssLoader = require('./exLoader/executor-css')
+let jsLoader = require('./exLoader/executor-js')
+let copyLoader = require('./exLoader/executor-copy')
+let defLoaderDic = [
+    { key: "vueLoader", func: vueLoader },
+    { key: "cssLoader", func: cssLoader },
+    { key: "jsLoader", func: jsLoader },
+    { key: "copy", func: copyLoader },
+]
+
+
 // 变量
-const succes = chalk.green;
-const error = chalk.red;
-const warn = chalk.yellow
 const defaultOpt = {
     dir: './dist/', //根目录
     clearExportDir: false,
@@ -20,10 +27,10 @@ const defaultOpt = {
     cssBeautifyMethod: "beautify", //keep-breaks .... clean-css format
     justCopy: false, //change all entry to copy method
     ascii_only: true,
-    //TODO: NO USE THIS TIME
-    scriptExName: '.js',
-    htmlExName: '.html',
-    styleExName: '.css',
+    
+    // scriptExName: '.js',
+    // htmlExName: '.html',
+    // styleExName: '.css',
 }
 
 //TODO: this is a test
@@ -66,8 +73,7 @@ function _start(modNames, opt) {
 
     console.time("clean")
     console.time("work")
-    console.log(chalk.green("---------start building--------"));
-
+    log.succes("---------start building--------");
     //check config's module's name is distinct
     let _namelist = opt.modules.map(x => { return x.name });
     _namelist.forEach(x => {
@@ -80,19 +86,15 @@ function _start(modNames, opt) {
 
     // create dir if not exists
     if (!fs.existsSync(opt.dir)) {
-        mkdirp(opt.dir);
+        commonFunc.ensureDir(opt.dir);
     }
     if (opt.clearExportDir) {
-        console.log(succes('start clean : ' + opt.dir))
+        log.succes('start clean : ' + opt.dir)
         fs.emptyDirSync(opt.dir)
         console.timeEnd("clean")
-        console.log(succes('clear success'))
+        log.succes('clear success')
     }
-
-    cleanCssFunc = new _cleanCss({
-        format: opt.beautify ? opt.cssBeautifyMethod : undefined, // formats output in a really nice way,
-        returnPromise: true
-    })
+  
 
 
     //用于忽略大小写
@@ -101,7 +103,7 @@ function _start(modNames, opt) {
 
     let modules = getModules(modNames, opt);
     return _minModsAsync(modules, opt);
-    // console.log(succes(msg));
+    
 
 }
 
@@ -115,7 +117,7 @@ function _start(modNames, opt) {
 function getModules(modNames, opt) {
     let result = [];
 
-    let modules = (modNames === 'all')?opt.modules:_recursiveToGetModules([], modNames, opt);
+    let modules = (modNames === 'all') ? opt.modules : _recursiveToGetModules([], modNames, opt);
 
     //distinct
     modules.filter(mod => {
@@ -179,12 +181,12 @@ function _minModsAsync(mods, opt) {
     for (let i = 0; i < mods.length; i++) {
         let oper_part_List = [];
         let mod = mods[i]
-        console.log(chalk.green("---------" + i + " module: " + mod.name + " begin work--------"));
+        log.succes("---------" + i + " module: " + mod.name + " begin work--------");
         //处理js        
         oper_part_List.push(entryExWorker('./', mod.scriptEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exJsFile(_pobj.src, _pobj.target, opt);
+                    return opt.justCopy ? copyLoader.execute(_pobj.src, _pobj.target, opt) : jsLoader.execute(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
@@ -192,7 +194,7 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.styleEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return opt.justCopy ? _copyFile(_pobj.src, _pobj.target, opt) : _exCssFile(_pobj.src, _pobj.target, opt);
+                    return opt.justCopy ? copyLoader.execute(_pobj.src, _pobj.target, opt) : cssLoader.execute(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
@@ -200,7 +202,7 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.htmlEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return _copyFile(_pobj.src, _pobj.target, opt);
+                    return copyLoader.execute(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
@@ -208,15 +210,39 @@ function _minModsAsync(mods, opt) {
         oper_part_List.push(entryExWorker('./', mod.copyEntry, [], opt).then(pathArray => {
             return Promise.all(
                 pathArray.map(_pobj => {
-                    return _copyFile(_pobj.src, _pobj.target, opt);
+                    return copyLoader.execute(_pobj.src, _pobj.target, opt);
                 })
             )
         }))
 
+        //处理一个总的入口
+        oper_part_List.push(entryExWorker('./', mod.entry, [], opt).then(pathArray => {
+            return Promise.all(
+                pathArray.map(_pobj => {
+                    var exName = path.extname(_pobj.src);
+                    if(!exName){
+                        return Promise.resolve({})
+                    }
+                    var loader = exName?
+                     opt.loader.find(x => x.test.includes(exName)).loader:
+                     copyLoader;
+
+                    if (!loader) {
+                        console.warn(`loader with exName: ${exName} not found `)
+                        return _exFile(_pobj.src, _pobj.target, copyLoader, opt);
+                    } else {
+                        return _exFile(_pobj.src, _pobj.target, loader, opt);
+                    }
+
+                })
+            )
+        }))
+
+
         //每个模块处理完后
         oper_mode_List.push(
             Promise.all(oper_part_List).then(values => {
-                console.log(chalk.green("---------" + i + " module: " + mod.name + " finish work--------"));
+                log.succes("---------" + i + " module: " + mod.name + " finish work--------");
                 return values;
             })
         )
@@ -228,9 +254,32 @@ function _minModsAsync(mods, opt) {
         let count = 0;
         values.forEach(x => count += x.length)
         console.timeEnd("work")
-        console.log(succes('执行完毕 共处理 ' + count + '个文件||文件夹'))
+        log.succes('执行完毕 共处理 ' + count + '个文件||文件夹')
     })
 }
+
+
+/**
+ *
+ *按loader处理文件
+ * @param {string} src
+ * @param {string} target
+ * @param {string||function} loader
+ * @param {object} opt
+ */
+function _exFile(src, target, loader, opt) {
+    if (typeof loader == "string") {
+        var _func = defLoaderDic.find(x => x.key == loader).func;
+        _func.execute(src, target, opt);
+    } else if (typeof loader == "function") {
+        loader(src, target, opt);
+    } else if (typeof loader == "object") {
+        loader.execute(src, target, opt);
+    } else {
+        throw "loader type error"
+    }
+}
+
 
 //包装那个递归方法_recursiveEntry以支持promise
 function entryExWorker(root, entry, _pobjList, opt) {
@@ -400,176 +449,6 @@ function _readDir(root, opt) {
     return result;
 }
 
-/**
- * 读取并压缩并复制
- * 这里不管正则什么的,路径提前生成好
- * @param {any} src 文件源 string
- * @param {any} target 结果目标 string
- * @param {object} opt 
- */
-function _exJsFile(src, target, opt) {
-    if (path.extname(src) !== opt.scriptExName) {
-        src += opt.scriptExName;
-    }
-    if (!fs.pathExistsSync(src)) {
-        return new Promise(function (resolve) {
-            resolve({ err: 'no file' });
-        });
-    }
-    console.log(succes('start min work on ' + src))
-    if (path.extname(target) !== opt.scriptExName) {
-        target += opt.scriptExName;
-    }
-    return fs.readFile(src, 'utf8')
-        .then((data) => {
-        	let result={};
-        	var type = src.split(".");
-        	if(type[type.length -1 ].toUpperCase() == "VUE"){
-        		var fileData = data.replace(/[\r\n\t]/g,"");
-        		try{
-					var html = fileData.match(/<template.*>(.*)<\/template>/)[0];
-					var script = fileData.match(/<script.*>(.*)<\/script>/)[1];
-					let res = uglifyjs.minify(script, { warnings: true });
-					if (res.error){
-						throw res.error +"\n 压缩js代码失败，已跳过jS压缩步骤，继续生成新文件。";
-						
-					} else{
-						script = uglifyjs.minify(script).code;
-					}
-					var css = fileData.match(/<style.*>(.*)<\/style>/)[0];
-					
-					/*fs.writeFile(outPath, html+"<script>"+script+"</script>"+css, (data) => {
-                		 if(data){console.log(data)};
-						});*/
-					result.code = html+"<script>"+script+"</script>"+css;
-					
-				}catch(err){
-					console.log(err.message); 
-			
-				}
-        		
-        		
-        	}else{
-        		result = uglifyjs.minify(data, {
-	                output: {
-	                    ascii_only: opt.ascii_only,
-	                    beautify: opt.beautify
-	                }
-            	});
-        	}
-        	
-            
-            if (result.error) {
-                throw result.error;
-            }
-            return _fuckDir(target).then(() => {
-                return fs.writeFile(target, result.code)
-            });
-        }).then(() => {
-            console.log(succes('min done: ' + target))
-            return { src: src, target: target };
-        }).catch(err => {
-            console.log(error('min error: ' + target))
-            console.log(error('-----------msg-------------'))
-            console.log(error(err))
-            console.log(error('-----------msg-------------'))
-            console.log(warn('try to start copy :' + target))
-            _copyFile(src, target, opt);
-        })
-}
-
-/**
- * 读取并压缩并复制
- * 这里不管正则什么的,路径提前生成好
- * @param {any} src 文件源 string
- * @param {any} target 结果目标 string
- * @param {object} opt 
- */
-function _exCssFile(src, target, opt) {
-    if (path.extname(src) !== opt.styleExName) {
-        src += opt.styleExName;
-    }
-    if (!fs.pathExistsSync(src)) {
-        return new Promise(function (resolve) {
-            resolve({ err: 'no file' });
-        });
-    }
-    console.log(succes('start css work on ' + src))
-    if (path.extname(target) !== opt.styleExName) {
-        target += opt.styleExName;
-    }
-    return fs.readFile(src, 'utf8')
-        .then((data) => {
-            return cleanCssFunc.minify(data)
-        }).then(result => {
-            if (result.error) {
-                throw result.error;
-            }
-            return _fuckDir(target).then(() => {
-                return fs.writeFile(target, result.styles)
-            });
-        }).then(() => {
-            console.log(succes('min style done: ' + target))
-            return { src: src, target: target };
-        }).catch(err => {
-            console.log(error('min style error: ' + target))
-            console.log(error('-----------msg-------------'))
-            console.log(error(err))
-            console.log(error('-----------msg-------------'))
-            console.log(warn('try to start copy :' + target))
-            _copyFile(src, target, opt);
-        })
-}
-
-/**
- * 复制文件
- * 这里不管正则什么的,路径要提前生成好
- * @param {any} src 文件源 string
- * @param {any} target 结果目标 string
- */
-function _copyFile(src, target, opt) {
-    console.log(succes('start copy on ' + src))
-    return _fuckDir(target)
-        .then(() => {
-            return fs.copy(src, target)
-        }).then(() => {
-            console.log(succes('copy done: ' + target))
-            return { src: src, target: target };
-        }).catch(err => {
-            if (err) {
-                console.log(error('copy error: ' + target))
-                console.log(error('-----------msg-------------'))
-                console.log(error(err))
-                console.log(error('-----------msg-------------'))
-            }
-        })
-}
-
-//make sure that path is exists
-function _fuckDir(pathStr) {
-    return new Promise((resolve, reject) => {
-        if (typeof pathStr !== 'string') {
-            return;
-        }
-        if (path.extname(pathStr)) {
-            pathStr = path.dirname(pathStr);
-        }
-        fs.pathExists(pathStr)
-            .then(exisits => {
-                if (exisits) {
-                    resolve()
-                } else {
-                    mkdirp(pathStr, (err) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        resolve();
-                    });
-                }
-            })
-
-    });
-}
 
 /** ----------------- below is class define ------------------ **/
 
