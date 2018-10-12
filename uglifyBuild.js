@@ -422,12 +422,43 @@ function _exJsFile(src, target, opt) {
     }
     return fs.readFile(src, 'utf8')
         .then((data) => {
-            let result = uglifyjs.minify(data, {
-                output: {
-                    ascii_only: opt.ascii_only,
-                    beautify: opt.beautify
-                }
-            });
+        	let result={};
+        	var type = src.split(".");
+        	if(type[type.length -1 ].toUpperCase() == "VUE"){
+        		var fileData = data.replace(/[\r\n\t]/g,"");
+        		try{
+					var html = fileData.match(/<template.*>(.*)<\/template>/)[0];
+					var script = fileData.match(/<script.*>(.*)<\/script>/)[1];
+					let res = uglifyjs.minify(script, { warnings: true });
+					if (res.error){
+						throw res.error +"\n 压缩js代码失败，已跳过jS压缩步骤，继续生成新文件。";
+						
+					} else{
+						script = uglifyjs.minify(script).code;
+					}
+					var css = fileData.match(/<style.*>(.*)<\/style>/)[0];
+					
+					/*fs.writeFile(outPath, html+"<script>"+script+"</script>"+css, (data) => {
+                		 if(data){console.log(data)};
+						});*/
+					result.code = html+"<script>"+script+"</script>"+css;
+					
+				}catch(err){
+					console.log(err.message); 
+			
+				}
+        		
+        		
+        	}else{
+        		result = uglifyjs.minify(data, {
+	                output: {
+	                    ascii_only: opt.ascii_only,
+	                    beautify: opt.beautify
+	                }
+            	});
+        	}
+        	
+            
             if (result.error) {
                 throw result.error;
             }
