@@ -11,24 +11,24 @@ program.version('0.3.1')
     .option('-clear --clear', '开始前先清空文件夹 clear dir before start')
     .option('-copy --copy', '不做任何处理只复制 no uglify just copy files')
     .option('-beautity --beautity', '不混淆只处理空格,注释 no uglify just beautity files')
-    .option('-init --initConfig',"初始化一个配置文件")
+    .option('-init --init',"初始化一个配置文件")
     .parse(process.argv);
 
 
-console.log(program.configPath)
-console.log(program.modNames)
-// console.log(program.clear)
-// console.log(program.copy)
-// console.log(program)
-console.log(program.initConfig)
+// console.log(program.configPath)
+// console.log(program.modNames)
+// // console.log(program.clear)
+// // console.log(program.copy)
+// // console.log(program)
+// console.log(program.initConfig)
 
-if(program.initConfig){
+if(program.init){
     var res = path.resolve("node_modules/uglifysite").replace(/\\/g, '/') + '/uglify.config.js'
     var des = path.resolve("").replace(/\\/g, '/') + '/uglify.config.js'
     console.log(res + " \n"+ des);
     fs.copy(res, des)
 }
-else if(program.start){
+else{
     let _cpath = program.configPath || path.resolve("").replace(/\\/g, '/') + '/uglify.config.js';
     uglifySite.setConfig(_cpath)
         .then(res => {
